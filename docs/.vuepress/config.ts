@@ -6,6 +6,7 @@ import pluginRegisterComponents from '@vuepress/plugin-register-components';
 import pluginSearch from '@vuepress/plugin-search';
 import { pwaPlugin } from '@vuepress/plugin-pwa';
 import { pwaPopupPlugin } from '@vuepress/plugin-pwa-popup';
+import { sitemapPlugin } from 'vuepress-plugin-sitemap2';
 import { defaultTheme, defineUserConfig } from 'vuepress';
 
 import childProcess from './utils/childProcess';
@@ -126,15 +127,8 @@ LANGS.forEach(lang => {
 const statsComponentsPath = path.join(DOCS_COMPONENTS_PATH, '.temp', 'stats');
 fs.mkdirSync(statsComponentsPath, { recursive: true });
 const clocStatsPath = path.join(statsComponentsPath, 'cloc.vue');
-const commitStatsPath = path.join(statsComponentsPath, 'commits.vue');
-run(
-    'generate/projectStats',
-    config.github.repo,
-    ROOT_PATH,
-    VUEPRESS_PATH,
-    clocStatsPath,
-    commitStatsPath
-);
+const gitStatsPath = path.join(statsComponentsPath, 'git.vue');
+run('generate/projectStats', ROOT_PATH, clocStatsPath, gitStatsPath);
 
 run(
     'generate/manifest',
@@ -186,6 +180,14 @@ const __VAR__ = {
     },
     contributors: contributorsFile.contributors,
     contributionTypes: contributorsFile.types,
+    stats: {
+        cloc: Object.fromEntries(
+            LANGS.map(lang => [lang, $t(lang, 'stats.cloc')])
+        ) as unknown as DocsVar['stats']['cloc'],
+        git: Object.fromEntries(
+            LANGS.map(lang => [lang, $t(lang, 'stats.git')])
+        ) as unknown as DocsVar['stats']['git'],
+    },
 } as DocsVar;
 
 export default defineUserConfig({
@@ -303,6 +305,10 @@ export default defineUserConfig({
 
     // plugins
     plugins: [
+        sitemapPlugin({
+            hostname: DOCS_URL.toString(),
+            changefreq: 'always',
+        }),
         pluginClipboard({ align: 'top', staticIcon: true }),
         pluginSearch({ locales: localeConfigs.searchConfigs }),
         pluginRegisterComponents({
@@ -354,7 +360,7 @@ export default defineUserConfig({
                     'translator-list.vue'
                 ),
                 'stats-cloc': clocStatsPath,
-                'stats-commits': commitStatsPath,
+                'stats-git': gitStatsPath,
             },
         }),
         pwaPlugin({

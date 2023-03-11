@@ -48,6 +48,10 @@
             "description": "Sets a gray filter over all ARRs that do not contain a word of the mission name.",
             "title": "Grey out unsuitable ARRs"
         },
+        "arrMatchHighlightAllWords": {
+            "description": "Uses all words of the missions name for the \"Grey out unsuitable ARRs\" feature.",
+            "title": "Use all words"
+        },
         "arrSearch": {
             "description": "Shows a search bar above the ARRs that makes filtering your ARRs available.",
             "title": "ARR-Search"
@@ -214,6 +218,13 @@
                 "vehicleTypes": [
                     2, 3, 4, 6, 7, 14, 15, 18, 23, 26, 35, 36, 39, 40, 41, 42,
                     43, 44, 45, 46, 47, 48, 49, 50
+                ]
+            },
+            {
+                "name": "Water",
+                "vehicleTypes": [
+                    57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
+                    72, 73, 74
                 ]
             },
             {
